@@ -9,7 +9,7 @@
 4. Зберегти результат у .txt файл
 5. Запушити все на GitHub
 """
-
+import csv
 
 # ============================================================
 # Крок 1. Створіть папку з проєктом
@@ -58,6 +58,50 @@ OUTPUT_FILE = "result.txt"
 # TODO 4: після циклу порахуйте середній бал по класу з кожного предмета
 #   (сума / кількість студентів)
 
+math_sum = 0
+python_sum = 0
+english_sum = 0
+count = 0
+
+best_student_name = ""
+best_avg = -1
+
+with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    next(f)
+    for line in f:
+        line = line.strip()
+        if not line:
+            continue
+        parts = line.split(",")
+        name = parts[0]
+        math_val = float(parts[1])
+        python_val = float(parts[2])
+        english_val = float(parts[3])
+
+        math_sum += math_val
+        python_sum += python_val
+        english_sum += english_val
+        count += 1
+
+        avg_student = (math_val + python_val + english_val) / 3
+        if avg_student > best_avg:
+            best_avg = avg_student
+            best_student_name = name
+
+avg_math = math_sum / count
+avg_python = python_sum / count
+avg_english = english_sum / count
+
+result_text = f"""Середній бал по класу:
+math: {avg_math:.1f}
+python: {avg_python:.1f}
+english: {avg_english:.1f}
+
+Найкращий студент: {best_student_name} ({best_avg:.1f})"""
+
+
+
+
 
 # ============================================================
 # Крок 4. Збережіть результат у .txt файл
@@ -77,7 +121,10 @@ OUTPUT_FILE = "result.txt"
 # Запустіть скрипт (python analyze.py) і перевірте, що в папці
 # з'явився файл result.txt.
 
+with open(OUTPUT_FILE, "w", encoding="utf-8") as out:
+    out.write(result_text)
 
+print(result_text)
 # ============================================================
 # Крок 5. Запушіть усе на GitHub
 # ============================================================
